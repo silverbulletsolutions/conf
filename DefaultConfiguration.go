@@ -35,6 +35,26 @@ func (d *DefaultConfiguration) GetString(id string, defaultValue string) string 
 	return defaultValue
 }
 
+// GetStrings
+// get array (slice) of strings, from keys `<id>__<IDX>` starting IDX from 0
+// first missing (empty or unexisting) value is considered as end of array.
+// Max length of array is 1024 elements
+func (d *DefaultConfiguration) GetStrings(id string) []string {
+	ret := make([]string, 0, 8)
+
+	idx := 0
+	for idx < 1024 {
+		v, ok := d.requiredConfiguration[fmt.Sprintf("%s__%d", id, idx)]
+		if !ok || v == "" {
+			return ret
+		}
+		ret = append(ret, v)
+		idx += 1
+	}
+
+	return ret
+}
+
 func (d *DefaultConfiguration) GetInt(id string, defaultValue int) int {
 	v, ok := d.requiredConfiguration[id]
 	if ok {

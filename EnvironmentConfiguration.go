@@ -48,6 +48,26 @@ func (e EnvironmentConfiguration) GetString(id string, defaultValue string) stri
 	return val
 }
 
+// GetStrings
+// get array (slice) of strings, from keys `<id>__<IDX>` starting IDX from 0
+// first missing (empty or unexisting) value is considered as end of array.
+// Max length of array is 1024 elements
+func (e EnvironmentConfiguration) GetStrings(id string) []string {
+	ret := make([]string, 0, 8)
+
+	idx := 0
+	for idx < 1024 {
+		val := os.Getenv(fmt.Sprintf("%s__%d", id, idx))
+		if val == "" {
+			return ret
+		}
+		ret = append(ret, val)
+		idx += 1
+	}
+
+	return ret
+}
+
 // GetInt
 // Try get int directly from `<id>` environment variable.
 // When variable not found or is empty - returns defaultValue
