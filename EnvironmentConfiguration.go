@@ -83,18 +83,30 @@ func (e EnvironmentConfiguration) GetInt(id string, defaultValue int) int {
 		return defaultValue
 	}
 	return v
-
 }
 
-func (e EnvironmentConfiguration) GetDurationS(id string, defaultValueS time.Duration) time.Duration {
+func (d EnvironmentConfiguration) GetDuration(id string, defaultValue int, unit time.Duration) time.Duration {
 	val := os.Getenv(id)
 	if val == "" {
-		return defaultValueS * time.Second
+		return time.Duration(defaultValue) * unit
 	}
 
 	v, err := strconv.Atoi(val)
 	if err != nil {
-		return defaultValueS * time.Second
+		return time.Duration(defaultValue) * unit
+	}
+	return time.Duration(v) * unit
+}
+
+func (e EnvironmentConfiguration) GetDurationS(id string, defaultValueS int) time.Duration {
+	val := os.Getenv(id)
+	if val == "" {
+		return time.Duration(defaultValueS) * time.Second
+	}
+
+	v, err := strconv.Atoi(val)
+	if err != nil {
+		return time.Duration(defaultValueS) * time.Second
 	}
 	return time.Second * time.Duration(v)
 }
@@ -106,3 +118,5 @@ func (e EnvironmentConfiguration) GetStringRequired(id string) string {
 	}
 	return val
 }
+
+var _ Configuration = EnvironmentConfiguration{}

@@ -8,5 +8,8 @@ type Configuration interface {
 	GetStrings(id string) []string
 	GetStringRequired(id string) string
 	GetInt(id string, defaultValue int) int
-	GetDurationS(id string, defaultValueS time.Duration) time.Duration
+	GetDuration(id string, defaultValue int, unit time.Duration) time.Duration
+
+	// Deprecated: use GetDuration instead (with a directly specified unit)
+	GetDurationS(id string, defaultValueS int) time.Duration
 }

@@ -64,13 +64,22 @@ func (d *DefaultConfiguration) GetInt(id string, defaultValue int) int {
 	return defaultValue
 }
 
-func (d *DefaultConfiguration) GetDurationS(id string, defaultValueS time.Duration) time.Duration {
+func (d *DefaultConfiguration) GetDuration(id string, defaultValue int, unit time.Duration) time.Duration {
+	v, ok := d.requiredConfiguration[id]
+	if ok {
+		t, _ := strconv.Atoi(v)
+		return time.Duration(t) * unit
+	}
+	return time.Duration(defaultValue) * unit
+}
+
+func (d *DefaultConfiguration) GetDurationS(id string, defaultValueS int) time.Duration {
 	v, ok := d.requiredConfiguration[id]
 	if ok {
 		t, _ := strconv.Atoi(v)
 		return time.Duration(t) * time.Second
 	}
-	return defaultValueS
+	return time.Duration(defaultValueS) * time.Second
 }
 
 func (d *DefaultConfiguration) GetStringRequired(id string) string {
@@ -81,3 +90,5 @@ func (d *DefaultConfiguration) GetStringRequired(id string) string {
 
 	return v
 }
+
+var _ Configuration = (*DefaultConfiguration)(nil)
