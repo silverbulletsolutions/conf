@@ -1,3 +1,3 @@
-module git.silverbullet.pl/golang-common-modules/conf
+module github.com/silverbulletsolutions/conf
 
-go 1.25.0
+go 1.26.0
